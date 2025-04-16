@@ -131,7 +131,7 @@ class IvimModelTopoPro(ReconstModel):
         bounds_sh = np.array(self.bounds[1:])
 
         # Optimizer #1: SHGO
-        minimizer_kwargs_pre = {'options': {f'ftol': 1e-4},
+        minimizer_kwargs_pre = {'options': {'ftol': 1e-4},
                                 'method': 'SLSQP'}
         res_one = shgo(self.stoc_search_cost, bounds_sh, iters=self.shgo_iters,
                        sampling_method='simplicial', args=(data,))
@@ -148,7 +148,7 @@ class IvimModelTopoPro(ReconstModel):
                         (x_f[2] - x_f[2]*.7, x_f[2] + x_f[2]*.7)]
 
         # build simplex around x_f (bounds must be symmetric)
-        minimizer_kwargs = {'options': {f'ftol': 1e-4}}
+        minimizer_kwargs = {'options': {'ftol': 1e-4}}
         res = shgo(self.nlls_cost, bounds_simpl, iters=self.shgo_iters,
                    minimizer_kwargs=minimizer_kwargs,
                    sampling_method='simplicial',

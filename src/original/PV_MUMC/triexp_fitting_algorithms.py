@@ -168,15 +168,15 @@ def fit_NNLS(bvalues, dw_data, IR=False,
             ampl_Dint = np.sum(x[idx_parint:idx_intmv]) #summing the amplitudes within the Dint range
             ampl_Dmv = np.sum(x[idx_intmv:]) #summing the amplitudes within the Dmv range
             if len(np.nonzero(x[:idx_parint])[0])>0: # Dpar exists
-                avg_Dpar = np.sum(Dspace[np.nonzero(x[:idx_parint])] * x[np.nonzero(x[:idx_parint])])/ampl_Dpar;
+                avg_Dpar = np.sum(Dspace[np.nonzero(x[:idx_parint])] * x[np.nonzero(x[:idx_parint])])/ampl_Dpar
             else:
                 avg_Dpar = 0
             if len(np.nonzero(x[idx_parint:idx_intmv])[0])>0: # Dint exists 
-                avg_Dint = np.sum(Dspace[idx_parint:][np.nonzero(x[idx_parint:idx_intmv])] * x[idx_parint:][np.nonzero(x[idx_parint:idx_intmv])])/ampl_Dint;
+                avg_Dint = np.sum(Dspace[idx_parint:][np.nonzero(x[idx_parint:idx_intmv])] * x[idx_parint:][np.nonzero(x[idx_parint:idx_intmv])])/ampl_Dint
             else:
                 avg_Dint = 0
             if len(np.nonzero(x[idx_intmv:])[0])>0: # Dmv exists
-                avg_Dmv = np.sum(Dspace[idx_intmv:][np.nonzero(x[idx_intmv:])] * x[idx_intmv:][np.nonzero(x[idx_intmv:])])/ampl_Dmv;
+                avg_Dmv = np.sum(Dspace[idx_intmv:][np.nonzero(x[idx_intmv:])] * x[idx_intmv:][np.nonzero(x[idx_intmv:])])/ampl_Dmv
             else:
                 avg_Dmv = 0
             
@@ -211,41 +211,41 @@ def correct_for_IR(ampl_Dpar, ampl_Dint, ampl_Dmv):
     :return corr_Fmv: Scalar, the fraction of Dmv, corrected for inversion recovery
 
     """
-    TtLt = np.exp(-echotime/tissueT2)*(1-2*np.exp(-inversiontime/tissueT1) + np.exp(-repetitiontime/tissueT1));
-    TbLb = np.exp(-echotime/bloodT2)*(1-np.exp(-repetitiontime/bloodT1));
-    TpLp = np.exp(-echotime/isfT2)*(1-2*np.exp(-inversiontime/isfT1) + np.exp(-repetitiontime/isfT1));
+    TtLt = np.exp(-echotime/tissueT2)*(1-2*np.exp(-inversiontime/tissueT1) + np.exp(-repetitiontime/tissueT1))
+    TbLb = np.exp(-echotime/bloodT2)*(1-np.exp(-repetitiontime/bloodT1))
+    TpLp = np.exp(-echotime/isfT2)*(1-2*np.exp(-inversiontime/isfT1) + np.exp(-repetitiontime/isfT1))
 
     #if all three components are present: 
     if ampl_Dpar>0 and ampl_Dint>0 and ampl_Dmv>0:
         #Calculate corrected fractions
-        n1 = ((TbLb*ampl_Dpar)/(ampl_Dmv*TtLt))+1;
-        n2 = (TtLt*TbLb*ampl_Dpar*ampl_Dint)/(ampl_Dpar*ampl_Dmv*TtLt*TpLp);
-        denom = n1 + n2;
-        z = 1/denom; # z is the microvascular fraction
-        x = ((TbLb*ampl_Dpar)/(ampl_Dmv*TtLt))*z; # x is the parenchymal fraction
-        y = 1-x-z; # y is the interstitial fluid fraction
-        corr_Fpar = x;
-        corr_Fint = y;
-        corr_Fmv = z;   
+        n1 = ((TbLb*ampl_Dpar)/(ampl_Dmv*TtLt))+1
+        n2 = (TtLt*TbLb*ampl_Dpar*ampl_Dint)/(ampl_Dpar*ampl_Dmv*TtLt*TpLp)
+        denom = n1 + n2
+        z = 1/denom # z is the microvascular fraction
+        x = ((TbLb*ampl_Dpar)/(ampl_Dmv*TtLt))*z # x is the parenchymal fraction
+        y = 1-x-z # y is the interstitial fluid fraction
+        corr_Fpar = x
+        corr_Fint = y
+        corr_Fmv = z   
         
     #if two components are present: 
     elif ampl_Dpar>0 and ampl_Dint>0 and ampl_Dmv==0:
-        corr_Fint = 1/(((ampl_Dpar/ampl_Dint)*(TpLp/TtLt))+1);
-        corr_Fpar = 1-corr_Fint;
-        corr_Fmv = ampl_Dmv;       
+        corr_Fint = 1/(((ampl_Dpar/ampl_Dint)*(TpLp/TtLt))+1)
+        corr_Fpar = 1-corr_Fint
+        corr_Fmv = ampl_Dmv       
     elif ampl_Dpar>0 and ampl_Dint==0 and ampl_Dmv>0:
-        corr_Fmv = 1/(((ampl_Dpar/ampl_Dmv)*(TbLb/TtLt))+1);
-        corr_Fpar = 1-corr_Fmv;
-        corr_Fint = ampl_Dint;     
+        corr_Fmv = 1/(((ampl_Dpar/ampl_Dmv)*(TbLb/TtLt))+1)
+        corr_Fpar = 1-corr_Fmv
+        corr_Fint = ampl_Dint     
     elif ampl_Dpar==0 and ampl_Dint>0 and ampl_Dmv>0:
-        corr_Fmv = 1/(((ampl_Dint/ampl_Dmv)*(TbLb/TpLp))+1);
-        corr_Fint = 1-corr_Fmv;  
-        corr_Fpar = ampl_Dpar;  
+        corr_Fmv = 1/(((ampl_Dint/ampl_Dmv)*(TbLb/TpLp))+1)
+        corr_Fint = 1-corr_Fmv  
+        corr_Fpar = ampl_Dpar  
         
     #if one component is present: 
     else:
-        corr_Fmv = ampl_Dmv; 
-        corr_Fint = ampl_Dint;
-        corr_Fpar = ampl_Dpar; 
+        corr_Fmv = ampl_Dmv 
+        corr_Fint = ampl_Dint
+        corr_Fpar = ampl_Dpar 
 
     return corr_Fpar, corr_Fint, corr_Fmv

@@ -91,7 +91,7 @@ def generate_IVIMmaps_standalone(DWIdata, bvalues, bminADC=150, bmaxADC=1000, bm
     ADClog, b0_intercept, used_bvalues = generate_ADC_standalone(DWIdata, bvalues, bminADC, bmaxADC)
 
     # Check if b=0 is acquired, otherwise f and D* cannot be calculated
-    if not 0 in bvalues:  # if b=0 is not acquired
+    if 0 not in bvalues:  # if b=0 is not acquired
         print('B=0 is not available. Hence, only the ADC is calculated.')
         return  # stop execution
 

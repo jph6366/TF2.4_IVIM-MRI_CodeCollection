@@ -384,7 +384,7 @@ def XCAT_to_MR_DCE(XCAT, TR, TE, bvalue, D, f, Ds, b0=3, ivim_cont = True, T1T2=
     return MR, Dim, fim, Dpim, legend
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=f"""
+    parser = argparse.ArgumentParser(description="""
     A commandline for generating a 4D IVIM phantom as nifti file
                                     """)
 
